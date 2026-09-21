@@ -1,0 +1,16 @@
+[
+  {
+    "name": "Example Co",
+    "ats": "lever",
+    "slug": "examplecompany",
+    "careers_url": "https://example.com/careers",
+    "note": "Why this company is on the list"
+  },
+  {
+    "name": "Another Co",
+    "ats": "manual",
+    "slug": null,
+    "careers_url": null,
+    "note": "No readable API, check by hand"
+  }
+]

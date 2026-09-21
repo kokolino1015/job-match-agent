@@ -1,0 +1,12 @@
+.env
+
+seen.json
+postings.json
+companies.json
+
+cv.txt
+profile.txt
+
+.venv/
+__pycache__/
+.idea/
