@@ -76,7 +76,7 @@ Approval fails closed. An empty answer counts as no, and the tool treats anythin
 ### What testing it showed
 
 - **Parallel calls pause one at a time.** When the model asks to score two postings in one turn, both calls run in the same `tools` step, and the first `interrupt` stops the whole step. The resume loop handles that by looping until no `__interrupt__` is left.
-- **A resumed node reruns from the top.** So anything before `interrupt()` runs again on every resume. With two parallel score calls, the approved call gets replayed when the second one is answered, and its side effect (the POST to the scoring service) can run twice. The safer design is a separate approval node between `agent` and `tools`: one interrupt covering all pending calls, with no side effects in the tool itself.
+- **A resumed node reruns from the top.** So anything before `interrupt()` runs again on every resume. With two parallel score calls, the approved call gets replayed when the second one is answered, and its side effect (the POST to the scoring service) runs twice. `test_interrupts.py` confirms it: the approved POST prints in the second invoke and again in the third. The safer design is a separate approval node between `agent` and `tools`: one interrupt covering all pending calls, with no side effects in the tool itself.
 - **The graph was tested with the model faked out.** A small graph containing only `ToolNode`, fed a hand-built `AIMessage` with two tool calls, reproduces the interrupt behaviour deterministically, without depending on what the model decides to do.
 
 ## Known limitations
