@@ -115,5 +115,29 @@ async def main():
             m.pretty_print()
 
 
+def make_gate(tool_node):
+    async def gate(state: State):
+        last = state["messages"][-1]
+        decisions = state.get("decisions", {})
+
+        approved, declined = [], []
+        for call in last.tool_calls:
+            if call["name"] in need_approval and decisions.get(call["id"]) != "y":
+                declined.append(call)
+            else:
+                approved.append(call)
+
+        messages = [ToolMessage(
+            content=f"The user declined {call['name']}. Do not estimate a score; report this posting as not scored.",
+            tool_call_id=call["id"]) for call in declined]
+
+        if approved:
+            only_approved = last.model_copy(update={"tool_calls": approved})
+            messages += (await tool_node.ainvoke({"messages": [only_approved]}))["messages"]
+
+        return {"messages": messages}
+    return gate
+
+
 if __name__ == "__main__":
     asyncio.run(main())
