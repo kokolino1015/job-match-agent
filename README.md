@@ -112,4 +112,3 @@ The read call is never blocked, because it is not in `need_approval`.
 - **No evaluation set.** Results were checked by comparing the agent's rankings against my own judgment on four postings I had already assessed. That caught a real bug (a junior-titled role dismissed on the title alone) but it is four data points, not a benchmark.
 - **Approval lives in the terminal.** The resume loop uses `input()`. A real deployment would put the question where the person already is (a ticket, a chat message) and resume when they answer.
 - **No idempotency key on scoring.** The approval split stops the replay, but the scoring call itself is still not safe to repeat. An idempotency key would make an accidental second call harmless.
-- **`test_interrupts.py` covers the old design.** It documents the bug; the fixed graph was verified with a separate fake-model run, not yet a committed test.
