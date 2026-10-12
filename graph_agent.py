@@ -1,4 +1,5 @@
 import asyncio
+import sys
 
 from langchain_mcp_adapters.client import MultiServerMCPClient
 from langchain_mcp_adapters.tools import load_mcp_tools
@@ -11,7 +12,7 @@ from langgraph.types import interrupt, Command
 
 client = MultiServerMCPClient({
     "Main": {
-        "command": "python",
+        "command": sys.executable,
         "args": ["jobs_server.py"],
         "transport": "stdio",
     }
