@@ -2,13 +2,17 @@ import json
 
 import ollama
 import requests
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+DATA = ROOT / "data"
 
 from config import MAX_TURNS, OLLAMA_MODEL, OLLAMA_MAX_TOKENS
 
 
 def list_posting():
     result = []
-    with open("postings.json") as f:
+    with open(str(DATA / "postings.json")) as f:
         for posting in json.load(f):
             result.append({
                 "id": posting["id"],
@@ -21,7 +25,7 @@ def list_posting():
 
 
 def read_posting(id: str):
-    with open("postings.json") as f:
+    with open(str(DATA / "postings.json")) as f:
         for posting in json.load(f):
             if posting["id"] == id:
                 return posting["description"]
@@ -36,7 +40,7 @@ def read_file(fileName: str):
 
 def score_posting(id: str):
     job_listing = read_posting(id)
-    cv = read_file("cv.txt")
+    cv = read_file(str(DATA / "cv.txt"))
     provider = "anthropic"
 
     return requests.post("http://localhost:8000/analyze_structured/", json={
@@ -65,7 +69,9 @@ TOOL_SCHEMAS = [
      "function": {"name": "list_posting", "description": "Lists all postings by title, company, id.",
                   "parameters": EMPTY_INPUT}},
     {"type": "function",
-     "function": {"name": "score_posting", "description": "Run a detailed analysis of the CV against a posting. Returns a match score and a breakdown of which requirements are met and which are not. Use this to confirm fit on shortlisted postings before recommending them.", "parameters": ID}},
+     "function": {"name": "score_posting",
+                  "description": "Run a detailed analysis of the CV against a posting. Returns a match score and a breakdown of which requirements are met and which are not. Use this to confirm fit on shortlisted postings before recommending them.",
+                  "parameters": ID}},
 ]
 
 
@@ -81,7 +87,7 @@ def run_tool(name, tool_input):
 
 def run_agent(question):
     messages = [
-        {"role": "system", "content": read_file("profile.txt")},
+        {"role": "system", "content": read_file(str(DATA / "profile.txt"))},
         {"role": "user", "content": question}
     ]
 

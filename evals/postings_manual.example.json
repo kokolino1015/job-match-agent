@@ -1,0 +1,52 @@
+[
+  {
+    "id": "example:ai-backend-engineer",
+    "title": "AI Backend Engineer",
+    "url": null,
+    "slug": "Example Analytics",
+    "location": "Sofia, Bulgaria, hybrid",
+    "department": "AI Platform",
+    "posted_at": 1792540800000,
+    "description": "Build Python services (FastAPI) around LLM agents with tool calling. Retrieval-augmented generation over internal documents, Postgres with pgvector. Design evaluation sets and track answer quality over time. Docker, CI/CD. Nice to have: MCP, Kubernetes, experience with a major cloud provider."
+  },
+  {
+    "id": "example:junior-ai-engineer",
+    "title": "Junior AI Engineer",
+    "url": null,
+    "slug": "Example Cloud",
+    "location": "Sofia, Bulgaria",
+    "department": "Cloud Operations",
+    "posted_at": 1792540800000,
+    "description": "Join the team building an agentic platform for cloud operations. Write Python agents that call tools to investigate alerts and propose fixes, with a human approving risky actions. Kubernetes basics, REST APIs, Git. Open to people early in their AI career with real projects to show."
+  },
+  {
+    "id": "example:junior-lowcode-developer",
+    "title": "Junior AI Developer",
+    "url": null,
+    "slug": "Example Consulting",
+    "location": "Sofia, Bulgaria",
+    "department": "Digital Solutions",
+    "posted_at": 1792540800000,
+    "description": "Configure AI assistants and automated workflows in a low-code vendor platform for business users. Maintain topics, prompts and connectors to office systems. Basic scripting is a plus. 1 to 2 years in application support or a low-code platform."
+  },
+  {
+    "id": "example:senior-ml-engineer-remote-us",
+    "title": "Senior AI/ML Engineer",
+    "url": null,
+    "slug": "Example Health",
+    "location": "Remote, United States",
+    "department": "Machine Learning",
+    "posted_at": 1792540800000,
+    "description": "Build conversational AI and agent features with evaluation harnesses and safety checks. Python, LLM APIs, experiment tracking. 4+ years of ML engineering. Candidates must be based in the United States with the right to work there; we cannot offer visa sponsorship."
+  },
+  {
+    "id": "example:dotnet-fullstack",
+    "title": "Full Stack Engineer (.NET)",
+    "url": null,
+    "slug": "Example Payments",
+    "location": "Sofia, Bulgaria",
+    "department": "Payments Platform",
+    "posted_at": 1792540800000,
+    "description": "C# and .NET 8 services, React with TypeScript, SQL Server or Postgres. Own features end to end in a payments product. On-call rotation. No AI work planned for this team."
+  }
+]

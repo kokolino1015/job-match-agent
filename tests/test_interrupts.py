@@ -6,7 +6,7 @@ from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.graph import StateGraph, START, END
 from langgraph.prebuilt import ToolNode
 from langgraph.types import Command
-from graph_agent import approval, State, make_gate
+from agent.graph_agent import approval, State, make_gate
 
 calls = []
 

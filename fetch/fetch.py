@@ -2,7 +2,7 @@ import json
 import requests
 import os
 
-for path in ("seen.json", "postings.json", "companies.json"):
+for path in ("seen.json", "postings.json", "companies.json", "postings_jobicy.json"):
     if not os.path.exists(path):
         with open(path, "w") as f:
             json.dump([], f)
@@ -49,20 +49,25 @@ def fetch_jobicy():
 slugs = []
 seen_ids = set()
 postings_to_add = []
+#
+# with open("companies.json") as c:
+#     companies = json.load(c)
+#     for company in companies:
+#         if company["ats"] == "lever":
+#             slugs.append(company["slug"])
+#
+# with open("seen.json") as c:
+#     seen_ids.update(json.load(c))
+#
+# fetch_lever(slugs)
+#
+# with open("postings.json", "a") as f:
+#     json.dump(postings_to_add, f)
+#
+# with open("seen.json", "w") as f:
+#     json.dump(sorted(seen_ids), f)
 
-with open("companies.json") as c:
-    companies = json.load(c)
-    for company in companies:
-        if company["ats"] == "lever":
-            slugs.append(company["slug"])
+fetch_jobicy()
 
-with open("seen.json") as c:
-    seen_ids.update(json.load(c))
-
-fetch_lever(slugs)
-
-with open("postings.json", "a") as f:
+with open("postings_jobicy.json", "w") as f:
     json.dump(postings_to_add, f)
-
-with open("seen.json", "w") as f:
-    json.dump(sorted(seen_ids), f)

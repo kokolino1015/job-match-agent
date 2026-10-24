@@ -1,0 +1,52 @@
+[
+  {
+    "id": "example:ai-backend-engineer",
+    "company": "Example Analytics",
+    "title": "AI Backend Engineer",
+    "verdict": "apply",
+    "fake_score": 78,
+    "reason": "Python services with LLM agents, RAG and evaluation; hybrid in Sofia.",
+    "must_mention": ["agent", "RAG"],
+    "notes": "Gap: cloud deployment at scale."
+  },
+  {
+    "id": "example:junior-ai-engineer",
+    "company": "Example Cloud",
+    "title": "Junior AI Engineer",
+    "verdict": "apply",
+    "fake_score": 75,
+    "reason": "Python agents and tool calling for operations work; the level is fine for an AI role.",
+    "must_mention": ["agent", "Python"],
+    "notes": "Trap: 'Junior' in the title is not a reason to skip."
+  },
+  {
+    "id": "example:junior-lowcode-developer",
+    "company": "Example Consulting",
+    "title": "Junior AI Developer",
+    "verdict": "skip",
+    "fake_score": 40,
+    "reason": "Mostly low-code configuration in a vendor platform, not Python AI engineering.",
+    "must_mention": ["low-code"],
+    "notes": "Trap in the other direction: skip because of the work, never because of the word 'Junior'."
+  },
+  {
+    "id": "example:senior-ml-engineer-remote-us",
+    "company": "Example Health",
+    "title": "Senior AI/ML Engineer",
+    "verdict": "skip",
+    "fake_score": 62,
+    "reason": "Strong topic overlap, but US-based only with no sponsorship.",
+    "must_mention": ["US", "sponsorship"],
+    "notes": "Hardest kind of skip: a good content match ruled out by location. A high score must not override the location rule."
+  },
+  {
+    "id": "example:dotnet-fullstack",
+    "company": "Example Payments",
+    "title": "Full Stack Engineer (.NET)",
+    "verdict": "maybe",
+    "fake_score": 65,
+    "reason": "Strong match on current .NET skills, but not the Python/AI direction.",
+    "must_mention": [".NET"],
+    "notes": "'maybe' here means fallback, not target."
+  }
+]

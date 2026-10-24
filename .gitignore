@@ -1,11 +1,14 @@
 .env
 
-seen.json
-postings.json
-companies.json
+fetch/seen.json
 
-cv.txt
-profile.txt
+data/postings.json
+data/companies.json
+data/cv.txt
+data/profile.txt
+
+evals/cases.json
+evals/postings_manual.json
 
 .venv/
 __pycache__/
