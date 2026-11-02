@@ -186,24 +186,36 @@ graph_agent.py ── MultiServerMCPClient ── stdio ── jobs_server.py (F
 - Every approval is answered "y" in code, so a run needs no keyboard.
 - It prints each case (expected, got, reason), then agreement, false skips (apply cases the agent skipped, the costly mistake), must-mention hits and time.
 
-**Baseline (24 Oct 2026), 20 cases:**
+**Results, 20 cases.** One change per row. Each row keeps the changes above it unless it says reverted.
 
 | Run | Agreement | False skips | Must-mention | Time |
 |---|---|---|---|---|
-| First baseline | 13/20 (65%) | 2 | 13/40 | 348 s |
+| First baseline (24 Oct) | 13/20 (65%) | 2 | 13/40 | 348 s |
 | Temperature 0 | 12/20 (60%) | 3 | 10/40 | 356 s |
+| Same, after the repo restructure (2 Nov) | 13/20 (65%) | 4 | 8/40 | 452 s |
+| Reason instruction in the decide prompt (reverted) | 10/20 (50%) | 5 | 6/40 | 695 s |
+| Verdict rules in the profile, output cap | 15/20 (75%) | 1 | 4/40 | 220 s |
+| Backend label changed to skip, same setup | 16/20 (80%) | 0 | 3/40 | 221 s |
 
-**What the misses show:**
+**What each change showed:**
 
-- **Every false skip had a bare reason.** When the model wrote a real reason, the verdict was mostly right. When it wrote only the verdict word ("skip"), it was often wrong. The `reason` field needs a description that asks for the posting's deciding requirements.
-- **All three "maybe" cases became skip.** My labels use maybe for a fallback (a strong non-AI or .NET role); the profile never says such roles are acceptable, so the model has no reason to choose maybe.
-- **Single runs vary.** Two cases flipped between the two runs even at temperature 0, so a change is judged on more than one run.
-- **One label is open.** The backend role asks for "proven experience scaling systems that serve millions of users". The model skips it on that requirement; my label says apply as a stretch. That is a labelling decision, not a bug.
+- **Single runs vary.** The same setup gave 2, 3 and 4 false skips over three runs, so a change is judged on more than one run.
+- **A field description did nothing.** With a description on `reason`, the run was identical to the one before it, word for word. `with_structured_output` in `langchain-ollama` defaults to `json_schema`, which sends the schema as Ollama's `format`: it constrains the output, but the model never reads it. `function_calling` puts the schema in the prompt as a tool, but Ollama cannot force a tool call, so one posting came back as plain text and no verdict.
+- **The same instruction in the prompt made it worse.** Asked what matches, what doesn't and which of those decides it, the model went looking for a deal-breaker and skipped strong matches on "3+ years" and "extensive experience". Reverted.
+- **Empty answers.** qwen3 reasons before it answers. LangChain drops that text, but it counts towards the output limit, and one posting reasoned until the limit and returned nothing, which crashed the run. The decide model now uses `include_raw=True`, so a failed parse is printed and counted as no verdict, and `num_predict=4096` stops a runaway. A cap of 512 was too small: almost every answer ran out during the hidden reasoning.
+- **Concrete profile rules worked.** "A years requirement up to about two years above his is a gap, not a reason to skip" turned three false skips into apply. The rule that a strong non-AI role is a maybe did nothing: all three maybe cases are still skip.
+- **The junior rule has a cost.** The junior role that is mostly low-code configuration (labelled skip) is now apply.
+- **One label was wrong.** The backend role requires "proven experience scaling systems that serve millions of users", which the profile rules out. The model was following the profile, so the label was changed to skip.
+
+**Still open:**
+
+- **Maybe is never chosen.**
+- **Most reasons are just the verdict word**, so must-mention is 3/40. A free-text `reason` lets the model write one word, whatever the instructions say. Next: required fields (the posting's key requirements, the gaps) before `verdict`, so the model has to fill them in before it decides.
 
 **Limits of the eval:**
 
 - 20 of 42 cases are scored. 20 cases have no saved posting text yet and 2 have only a one-line summary; a case judged without its text would measure title guessing, which is the bug the decide step fixed.
-- The 20 lean towards apply (14 apply, 3 maybe, 3 skip), so "apply to everything" would already score 14/20. False skips and the skip cases matter more than overall agreement.
+- The 20 lean towards apply (13 apply, 3 maybe, 4 skip), so "apply to everything" would already score 13/20. False skips and the skip cases matter more than overall agreement.
 - The fake scorer returns only the number; the real one also returns matched and missing requirements, so the model has less evidence than in real use.
 - Must-mention is a substring check, so it is a rough signal.
 

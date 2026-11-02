@@ -69,7 +69,8 @@ def build_graph(tools):
     tool_node = ToolNode(tools, handle_tool_errors=True)
     tools_by_name = {t.name: t for t in tools}
     llm_with_tools = ChatOllama(model="qwen3:30b", num_ctx=32768, temperature=0).bind_tools(tools)
-    llm_decide = ChatOllama(model="qwen3:30b", num_ctx=32768, temperature=0).with_structured_output(Verdict)
+    llm_decide = (ChatOllama(model="qwen3:30b", num_ctx=32768, temperature=0, num_predict=4096)
+        .with_structured_output(Verdict, include_raw=True))
 
     async def agent(state: MessagesState):
         response = await llm_with_tools.ainvoke(state["messages"])
@@ -107,7 +108,12 @@ def build_graph(tools):
                     f"Description:\n{text}\n\nCV match analysis:\n{score}\n\n"
                     "Give your verdict (apply / maybe / skip) and a one-line reason based on this posting.")
             ])
-            decisions.append(Decision(posting_id=p["id"], verdict=v.verdict, reason=v.reason))
+            parsed = v["parsed"]
+            if parsed is None:
+                print(f"NO VERDICT {p['id']}: done_reason={v['raw'].response_metadata.get('done_reason')} "
+                      f"content={v['raw'].content[:200]!r}")
+                continue
+            decisions.append(Decision(posting_id=p["id"], verdict=parsed.verdict, reason=parsed.reason))
         return {"result": AgentResult(decisions=decisions)}
 
     builder = StateGraph(State)

@@ -73,7 +73,7 @@ def main():
     decisions = asyncio.run(run_agent(cases_by_id))
     seconds = time.perf_counter() - start
 
-    cases = [c for c in cases_by_id.values() if c["id"] in postings]
+    cases = [c for c in cases_by_id.values() if c["id"] in postings and "summary only" not in postings[c["id"]]["description"]]
 
     agree, false_skips, hits, total = 0, [], 0, 0
     for case in cases:
