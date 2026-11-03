@@ -3,6 +3,7 @@
 fetch/seen.json
 
 data/postings.json
+data/postings_jobicy.json
 data/companies.json
 data/cv.txt
 data/profile.txt

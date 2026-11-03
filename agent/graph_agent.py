@@ -87,7 +87,7 @@ def build_graph(tools):
         scored = {}
         for m in messages:
             if isinstance(m, ToolMessage) and m.tool_call_id in call_to_posting.keys():
-                if m.status == "error" or m.text.startswith("The user declined"):
+                if m.status == "error":
                     continue
                 scored[call_to_posting[m.tool_call_id]] = m.text
 
@@ -169,6 +169,8 @@ def make_gate(tool_node):
 
         messages = [ToolMessage(
             content=f"The user declined {call['name']}. Do not estimate a score; report this posting as not scored.",
+            status="error",
+            name=call["name"],
             tool_call_id=call["id"]) for call in declined]
 
         if approved:

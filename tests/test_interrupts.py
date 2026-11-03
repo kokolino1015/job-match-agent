@@ -56,12 +56,13 @@ async def main():
         print(f"    {m.tool_call_id}: {str(m.content)[:100]}")
 
 
-    results = {m.tool_call_id: str(m.content) for m in result["messages"][1:]}
+    results = {m.tool_call_id: m.status for m in result["messages"][1:]}
 
     assert len(calls) == 1, f"expected 1 POST, got {len(calls)}: {calls}"
-    assert "declined" in results["call_b"]
-    assert "80" in results["call_a"]
-    print("OK: approved call ran once, declined call never ran")
+    assert results["call_b"] == "error"
+    assert results["call_a"] == "success"
+    assert calls == ["manual:ai-automation-engineer-sofia"]
+    print("OK: approved call ran once, declined call comes up with status error")
 
 if __name__ == "__main__":
     asyncio.run(main())
